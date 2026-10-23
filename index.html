@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Interview Video Signals</title>
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <div class="eyebrow">ECE496 · VIDEO SIGNALS PROTOTYPE</div>
+        <h1>Interview video signals</h1>
+        <p class="subtitle">A MediaPipe face, hand, and posture webcam experiment</p>
+      </header>
+
+      <div class="notice">
+        <strong>Practice simulation, not mind reading.</strong>
+        The simulated confidence estimate combines outward webcam cues, including smiling, but cannot verify a person's internal confidence, competence, or interview performance. Do not use it to make hiring decisions.
+      </div>
+
+      <div class="layout">
+        <section class="panel video-panel" aria-label="Webcam preview">
+          <div class="video-wrap" id="videoWrap">
+            <div class="placeholder" id="placeholder">
+              <div class="camera-icon">◎</div>
+              <strong>Your webcam preview will appear here</strong>
+              <span>Camera access starts only when you press the button.</span>
+            </div>
+            <video id="video" playsinline muted hidden></video>
+            <canvas id="overlay" hidden></canvas>
+          </div>
+          <div class="controls">
+            <button id="startBtn" class="primary">Start webcam</button>
+            <button id="stopBtn" class="secondary" disabled>Stop</button>
+            <button id="resetBtn" class="text-button">Reset session</button>
+            <span class="status" id="status">Idle</span>
+          </div>
+          <details class="raw-details">
+            <summary>Inspect latest raw output</summary>
+            <pre id="raw">Start the webcam to populate the MediaPipe result.</pre>
+          </details>
+        </section>
+
+        <aside class="panel metrics-panel" aria-label="Live measurements">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <div class="metric-label">Face tracking</div>
+              <div class="metric-value" id="tracking">—</div>
+              <div class="metric-hint">processed frames with a detected face</div>
+              <div class="bar"><span id="trackingBar"></span></div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Camera framing</div>
+              <div class="metric-value" id="framing">—</div>
+              <div class="metric-hint">based on face position only</div>
+              <div class="bar"><span id="framingBar"></span></div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Blink counter</div>
+              <div class="metric-value" id="blinks">0</div>
+              <div class="metric-hint">session total · resets with Reset session</div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Smile signal</div>
+              <div class="metric-value" id="smile">—</div>
+              <div class="metric-hint">raw blendshape average, not emotion</div>
+            </article>
+            <article class="metric-card metric-card--wide">
+              <div class="metric-label">Eye contact estimate</div>
+              <div class="metric-value boolean-value is-false" id="eyeContact">False</div>
+              <div class="metric-hint">camera-facing gaze heuristic, not verified attention</div>
+            </article>
+            <article class="metric-card metric-card--wide">
+              <div class="metric-label">Movement detected</div>
+              <div class="metric-value boolean-value motion-value" id="movementDetected">—</div>
+              <div class="metric-hint" id="movementHint">sustained visual motion in the webcam frame</div>
+              <div class="bar" aria-hidden="true"><span id="movementBar"></span></div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Possible face touches</div>
+              <div class="metric-value" id="faceTouches">—</div>
+              <div class="metric-hint" id="faceTouchHint">2D hand/face proximity events</div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Hand gesture activity</div>
+              <div class="metric-value metric-value--text" id="handActivity">—</div>
+              <div class="metric-hint" id="handActivityHint">movement amount, not gesture quality</div>
+              <div class="bar" aria-hidden="true"><span id="handActivityBar"></span></div>
+            </article>
+            <article class="metric-card metric-card--wide">
+              <div class="metric-label">Posture / leaning</div>
+              <div class="metric-value metric-value--text" id="postureState">—</div>
+              <div class="metric-hint" id="postureHint">relative to your natural starting position</div>
+              <div class="bar" aria-hidden="true"><span id="postureBar"></span></div>
+            </article>
+            <article class="metric-card metric-card--wide">
+              <div class="metric-label">Simulated confidence estimate</div>
+              <div class="metric-value" id="confidenceScore">—</div>
+              <div class="metric-hint" id="confidenceHint">appearance-based practice heuristic, not a psychological measurement</div>
+              <div class="bar" aria-hidden="true"><span id="confidenceBar"></span></div>
+            </article>
+          </div>
+
+          <h2>Current observations</h2>
+          <div class="observation-list">
+            <div class="observation"><span>Face detected</span><strong id="detected">No</strong></div>
+            <div class="observation"><span>Face center</span><strong id="position">—</strong></div>
+            <div class="observation"><span>Eye openness proxy</span><strong id="eyes">—</strong></div>
+            <div class="observation"><span>Inference time</span><strong id="latency">—</strong></div>
+          </div>
+
+          <div class="experiment-tip">
+            <div class="tip-heading">Try a controlled test</div>
+            <p>Start in your natural seated position while posture calibrates, then talk and gesture normally. Try leaning, bringing a hand near your face, looking away, smiling, and moving partly out of frame.</p>
+          </div>
+
+          <div class="privacy-note">This page does not upload video to your project backend. The model and WebAssembly files load from Google's model host and jsDelivr.</div>
+        </aside>
+      </div>
+      <footer>Prototype only · Use consented test footage for any participant evaluation</footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
